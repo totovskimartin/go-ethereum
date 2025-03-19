@@ -26,14 +26,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Set up Hardhat
+      - name: Setup and deploy Hardhat
         run: |
           cd hardhat
           npm install
-
-      - name: Deploy Contracts
-        run: |
-          cd hardhat
+          npx hardhat compile
           npx hardhat run scripts/deploy.js --network localhost
 
       - name: Commit and Push Docker Image
