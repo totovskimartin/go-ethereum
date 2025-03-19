@@ -1,17 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox");
 
+/** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
+  solidity: "0.8.28",
   networks: {
-    localhost: {
-      url: "http://127.0.0.1:8545",
-      accounts: {
-        mnemonic: "test test test test test test test test test test test junk",
-      },
-      chainId: 31337,
-      gasPrice: 150
+    devnet: {
+      url: `http://127.0.0.1:8545`,
+      gasPrice: 30000000000,
     },
   },
-  solidity: {
-    version: "0.8.28",
-  }
 };
