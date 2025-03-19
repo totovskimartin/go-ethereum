@@ -25,12 +25,10 @@ jobs:
         run: |
           cd hardhat
           npm install
-
       - name: Deploy Contracts
         run: |
           cd hardhat
           npx hardhat run scripts/deploy.js --network localhost
-
       - name: Commit and Push Docker Image
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
