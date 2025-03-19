@@ -8,7 +8,7 @@ module.exports = {
         mnemonic: "test test test test test test test test test test test junk",
       },
       chainId: 1337,
-      gasPrice: 8000000000
+      gasPrice: 150
     },
   },
   solidity: {
