@@ -6,40 +6,30 @@ on:
       - closed
 
 jobs:
-  deploy:
+  deploy-and-build:
     if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Docker
-        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
 
-      - name: Set up Docker Compose
-        run: |
-          sudo apt-get install -y docker-compose
-          docker-compose up -d
-
-      - name: Install Node.js
-        uses: actions/setup-node@v4
+      - name: Login to DockerHub
+        uses: docker/login-action@v3
         with:
-          node-version: '20'
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PAT }}
 
-      - name: Setup and deploy Hardhat
-        run: |
-          cd hardhat
-          npm install
-          npx hardhat compile
-          npx hardhat run scripts/deploy.js --network localhost
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: hardhat/Dockerfile
+          push: true
+          tags: e1018mc/limechain:smart_contract
 
-      - name: Commit and Push Docker Image
-        env:
-          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-          DOCKER_PASSWORD: ${{ secrets.DOCKER_PAT }}
-        run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-          id=$(docker ps -q -f "ancestor=${{ env.DOCKERHUB_IMAGE }}")
-          docker commit $id ${{ env.DOCKERHUB_IMAGE }}:deployed
-          docker push ${{ env.DOCKERHUB_IMAGE }}:deployed
+      - name: Run local devnet
+        run: docker-compose up -d
