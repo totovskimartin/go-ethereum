@@ -29,7 +29,7 @@ jobs:
           context: .
           file: hardhat/Dockerfile
           push: true
-          tags: e1018mc/limechain:smart_contract
+          tags: mtotovski/go-ethereum:contracts-deployed
 
       - name: Run local devnet
         run: docker-compose up -d
