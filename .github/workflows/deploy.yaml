@@ -23,6 +23,9 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PAT }}
 
+      - name: Run local devnet
+        run: docker compose up -d
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -31,5 +34,4 @@ jobs:
           push: true
           tags: mtotovski/go-ethereum:contracts-deployed
 
-      - name: Run local devnet
-        run: docker-compose up -d
+      
