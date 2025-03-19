@@ -7,7 +7,7 @@ module.exports = {
       accounts: {
         mnemonic: "test test test test test test test test test test test junk",
       },
-      chainId: 1337,
+      chainId: 31337,
       gasPrice: 150
     },
   },
