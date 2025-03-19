@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   geth:
-    image: ${DOCKERHUB_IMAGE}
+    image: mtotovski/go-ethereum
     ports:
       - "8545:8545"
     networks:
