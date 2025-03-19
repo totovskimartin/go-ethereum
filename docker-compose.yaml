@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   geth:
-    image: ${{ env.DOCKERHUB_IMAGE }}
+    image: ${DOCKERHUB_IMAGE}
     ports:
       - "8545:8545"
     networks:
