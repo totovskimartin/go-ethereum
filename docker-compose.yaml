@@ -1,16 +1,18 @@
 services:
-  geth:
-    image: mtotovski/go-ethereum
+  geth-app:
+    image: mtotovski/go-ethereum:latest
+    platform: linux/x86_64
+    ports:
+      - "8546:8546"
+    networks:
+      - geth-net
+  geth-app-contracts:
+    image: mtotovski/go-ethereum:contracts-deployed
+    platform: linux/x86_64
     ports:
       - "8545:8545"
     networks:
       - geth-net
-    command: >
-      --dev
-      --http
-      --http.addr 0.0.0.0
-      --http.port 8545
-      --http.api personal,eth,net,web3
 
 networks:
   geth-net:
