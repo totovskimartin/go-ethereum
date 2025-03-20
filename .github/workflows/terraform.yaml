@@ -1,0 +1,41 @@
+name: Deploy EKS with Terraform
+
+on:
+  pull_request:
+    types: 
+      - closed
+
+jobs:
+  deploy-and-build:
+    if: github.event.pull_request.merged == true && contains(github.event.pull_request.labels.*.name, 'CI:Deploy')
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          cli_config_credentials_token: ${{ secrets.GITHUB_TOKEN }}
+          terraform_version: 1.0.11
+
+      - name: Setup AWS CLI credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Terraform stages
+        run: |
+          cd terraform/ 
+          terraform init
+          terraform fmt -check
+          terraform validate
+          terraform plan
+      #   terraform apply -auto-approve
+
