@@ -39,11 +39,9 @@ jobs:
           CONTAINER_ID=$(docker ps --filter "name=geth" --format="{{.ID}}")
           
           docker exec -w /hardhat $CONTAINER_ID sh -c "
-            npm install &&
-            npx hardhat compile &&
             npx hardhat run scripts/deploy.js
           "
-                
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
