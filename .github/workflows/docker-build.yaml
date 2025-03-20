@@ -29,3 +29,6 @@ jobs:
           context: .
           tags: ${{ env.DOCKERHUB_IMAGE }}
           push: true
+      
+      - name: Run local devnet # Using mtotovski/go-ethereum:latest (vanilla geth container)
+        run: docker compose up -d
