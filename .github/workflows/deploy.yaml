@@ -38,8 +38,15 @@ jobs:
         run: |
           CONTAINER_ID=$(docker ps --filter "name=geth" --format="{{.ID}}")
           
-          docker exec -w /hardhat $CONTAINER_ID sh -c "
-            npx hardhat run scripts/deploy.js
+          docker exec -w / $CONTAINER_ID sh -c "
+            mkdir hardhat && 
+            cd hardhat &&
+            npm init &&
+            npm install --save-dev hardhat &&
+            npx hardhat init &&
+            npx hardhat compile &&
+            npx hardhat test &&
+            npx hardhat ignition deploy ./ignition/modules/Lock.js
           "
 
       - name: Build and push Docker image
