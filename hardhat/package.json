@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "test": "npx hardhat test --network localhost",
     "deploy": "npx hardhat ignition deploy ./ignition/modules/Apollo.js --network localhost"
   },
   "keywords": [],
