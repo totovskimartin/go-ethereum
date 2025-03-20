@@ -9,3 +9,13 @@ services:
      command: >
        --dev --http --http.addr=0.0.0.0 --http.api=eth,net,web3,personal,miner,debug,txpool --http.corsdomain="*" --ws --ws.addr=0.0.0.0 --ws.api=eth,net,web3 --ws.origins="*" --allow-insecure-unlock --mine --networkid=1337
      restart: unless-stopped
+   geth-contracts-deployed:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     image: mtotovski/go-ethereum:contracts-deployed
+     ports:
+       - "8546:8546" # JSON-RPC HTTP
+     command: >
+       --dev --http --http.addr=0.0.0.0 --http.api=eth,net,web3,personal,miner,debug,txpool --http.corsdomain="*" --ws --ws.addr=0.0.0.0 --ws.api=eth,net,web3 --ws.origins="*" --allow-insecure-unlock --mine --networkid=1337
+     restart: unless-stopped
