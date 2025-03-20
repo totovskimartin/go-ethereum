@@ -35,7 +35,7 @@ COPY ./hardhat/package.json ./hardhat/package-lock.json ./
 RUN npm install
 
 # Copy the rest of your Hardhat files
-COPY ./hardhat/ ./hardhat
+COPY ./hardhat/ .
 
 EXPOSE 8545 8546 30303 30303/udp
 
