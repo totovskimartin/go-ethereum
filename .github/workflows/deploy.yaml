@@ -41,6 +41,7 @@ jobs:
           docker exec -w / $CONTAINER_ID sh -c "
             mkdir hardhat && 
             cd hardhat &&
+            npm install &&
             npm init &&
             npm install --save-dev hardhat &&
             npx hardhat init &&
