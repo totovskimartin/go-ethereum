@@ -25,4 +25,9 @@ COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 EXPOSE 8545 8546 30303 30303/udp
 ENTRYPOINT ["geth"]
 
+# Add some metadata labels to help programmatic image consumption
+ARG COMMIT=""
+ARG VERSION=""
+ARG BUILDNUM=""
+
 LABEL commit="$COMMIT" version="$VERSION" buildnum="$BUILDNUM"
