@@ -34,7 +34,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: hardhat/Dockerfile
+          file: Dockerfile
           push: true
           tags: mtotovski/go-ethereum:contracts-deployed
 
