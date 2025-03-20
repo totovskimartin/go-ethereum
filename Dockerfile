@@ -22,12 +22,17 @@ FROM alpine:latest
 RUN apk add --no-cache ca-certificates
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 
-EXPOSE 8545 8546 30303 30303/udp
-ENTRYPOINT ["geth"]
+WORKDIR /app
 
-# Add some metadata labels to help programmatic image consumption
-ARG COMMIT=""
-ARG VERSION=""
-ARG BUILDNUM=""
+# Copy package.json and package-lock.json and install dependencies
+COPY ./hardhat/package.json ./hardhat/package-lock.json ./
+RUN npm install
+
+# Copy the remaining Hardhat project files
+COPY ./hardhat/ .
+
+EXPOSE 8545 8546 30303 30303/udp
+
+ENTRYPOINT ["geth"]
 
 LABEL commit="$COMMIT" version="$VERSION" buildnum="$BUILDNUM"
