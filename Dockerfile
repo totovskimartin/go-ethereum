@@ -1,44 +1,33 @@
+# Support setting various labels on the final image
 ARG COMMIT=""
 ARG VERSION=""
 ARG BUILDNUM=""
 
-# First stage: Build the Geth binary
-FROM golang:1.20-alpine AS builder
+# Build Geth in a stock Go builder container
+FROM golang:1.24-alpine AS builder
 
 RUN apk add --no-cache gcc musl-dev linux-headers git
 
-# Get Go dependencies
+# Get dependencies - will also be cached if we won't change go.mod/go.sum
 COPY go.mod /go-ethereum/
 COPY go.sum /go-ethereum/
 RUN cd /go-ethereum && go mod download
 
-# Build Geth
 ADD . /go-ethereum
 RUN cd /go-ethereum && go run build/ci.go install -static ./cmd/geth
 
-# Second stage: Node.js setup with Geth
-FROM node:16-alpine
+# Pull Geth into a second stage deploy alpine container
+FROM alpine:latest
 
-# Install necessary packages
 RUN apk add --no-cache ca-certificates
-
-# Copy the Geth binary into the runtime image
 COPY --from=builder /go-ethereum/build/bin/geth /usr/local/bin/
 
-# Set the working directory for your application
-WORKDIR /app
-
-# Copy package.json and package-lock.json and install dependencies
-COPY ./hardhat/package.json ./hardhat/package-lock.json ./
-RUN npm install
-
-# Copy the remaining Hardhat project files
-COPY ./hardhat/ .
-
-# Expose application ports
 EXPOSE 8545 8546 30303 30303/udp
-
-# Start Geth or replace with the needed CMD to start your application
 ENTRYPOINT ["geth"]
+
+# Add some metadata labels to help programmatic image consumption
+ARG COMMIT=""
+ARG VERSION=""
+ARG BUILDNUM=""
 
 LABEL commit="$COMMIT" version="$VERSION" buildnum="$BUILDNUM"
