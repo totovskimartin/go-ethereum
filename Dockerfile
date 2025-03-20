@@ -1,3 +1,7 @@
+ARG COMMIT=""
+ARG VERSION=""
+ARG BUILDNUM=""
+
 # First stage: Build the Geth binary
 FROM golang:1.20-alpine AS builder
 
