@@ -35,12 +35,11 @@ jobs:
           cd hardhat
           npm install
           npx hardhat compile
-          npx hardhat run scripts/deploy.js
+          npx hardhat ignition deploy ./ignition/modules/Lock.js --network localhost
 
       - name: Docker compose up
         run: |
-          docker compose up --build -d
-          sleep 15
+          docker compose --build
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
