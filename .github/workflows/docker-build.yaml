@@ -27,8 +27,8 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: ${{ env.DOCKERHUB_IMAGE }}
+          tags: ${{ env.DOCKERHUB_REPO }}
           push: true
       
-      - name: Run local devnet # Using mtotovski/go-ethereum:latest (vanilla geth container)
+      - name: Run local devnet # Using mtotovski/go-ethereum:latest (vanilla geth image)
         run: docker compose up -d
