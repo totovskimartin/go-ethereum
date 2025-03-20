@@ -27,29 +27,20 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PAT }}
 
-      - name: Setup Docker Buildx
+      - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
+
+      - name: Deploy Hardhat Contracts
+        run: |
+          cd hardhat
+          npm install
+          npx hardhat compile
+          npx hardhat run scripts/deploy.js
 
       - name: Docker compose up
         run: |
           docker compose up -d
-
-      - name: Deploy Hardhat Contracts
-        run: |
-          CONTAINER_ID=$(docker ps --filter "name=geth" --format="{{.ID}}")
-          
-          docker exec -w / $CONTAINER_ID sh -c "
-            mkdir hardhat && 
-            cd hardhat &&
-            npm install &&
-            npm init &&
-            npm install --save-dev hardhat &&
-            npx hardhat init &&
-            npx hardhat compile &&
-            npx hardhat test &&
-            npx hardhat ignition deploy ./ignition/modules/Lock.js
-          "
-
+      
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
