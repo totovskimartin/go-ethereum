@@ -1,7 +1,7 @@
 provider "kubernetes" {
-  host = aws_eks_cluster.example.endpoint
+  host                   = aws_eks_cluster.example.endpoint
   cluster_ca_certificate = base64decode(aws_eks_cluster.example.certificate_authority[0].data)
-  token = data.aws_eks_cluster_auth.example.token
+  token                  = data.aws_eks_cluster_auth.example.token
 }
 
 data "aws_eks_cluster_auth" "cluster" {
@@ -10,7 +10,7 @@ data "aws_eks_cluster_auth" "cluster" {
 
 resource "kubernetes_deployment" "go_ethereum" {
   metadata {
-    name = "go-ethereum"
+    name      = "go-ethereum"
     namespace = "geth-app"
   }
 
