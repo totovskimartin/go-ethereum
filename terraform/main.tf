@@ -15,7 +15,7 @@ resource "aws_subnet" "eks_subnet" {
 
 data "aws_availability_zones" "available" {}
 
-resource "aws_eks_cluster" "example" {
+resource "aws_eks_cluster" "geth-cluster" {
   name     = var.cluster_name
   role_arn = aws_iam_role.eks_cluster_role.arn
 
@@ -52,7 +52,7 @@ resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
 }
 
 resource "aws_eks_node_group" "geth_nodes" {
-  cluster_name    = aws_eks_cluster.example.name
+  cluster_name    = aws_eks_cluster.geth-cluster.name
   node_group_name = "geth_nodes"
   node_role_arn   = aws_iam_role.eks_node_role.arn
   subnet_ids      = aws_subnet.eks_subnet[*].id
@@ -101,4 +101,13 @@ resource "aws_iam_role_policy_attachment" "eks_cni_policy" {
 resource "aws_iam_role_policy_attachment" "eks_vpc_resource_controller_policy" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController"
   role       = aws_iam_role.eks_cluster_role.name
+}
+
+terraform {
+  backend "s3" {
+    bucket  = "mtotovski-go-ethereum-tfstate-bucket"
+    key     = "states/terraform.tfstate"
+    region  = "eu-west-1"
+    encrypt = true
+  }
 }

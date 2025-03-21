@@ -43,3 +43,30 @@ profile.cov
 .vscode
 
 tests/spec-tests/
+
+# Ignore Terraform state files
+terraform/*.tfstate
+terraform/*.tfstate.*
+
+# Ignore crash logs
+terraform/crash.log
+
+# Ignore execution plan files (e.g., *.tfplan)
+terraform/*.tfplan
+
+# Ignore backup files
+terraform/*~
+terraform/*.bak
+
+# Ignore .terraform directories containing provider binaries and other internal files
+terraform/.terraform/
+
+# Ignore override files
+terraform/override.tf
+terraform/override.tf.json
+terraform/*_override.tf
+terraform/*_override.tf.json
+
+# Optionally ignore variable definition files depending on your version control strategy
+# terraform/*.tfvars
+# terraform/*.tfvars.json
