@@ -1,17 +1,19 @@
 {
   "name": "hardhat",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy": "hardhat ignition deploy ./ignition/modules/Lock.js --network localhost"
+    "test": "npx hardhat test --network localhost",
+    "deploy": "npx hardhat ignition deploy ./ignition/modules/Apollo.js --network localhost"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
+    "@nomicfoundation/hardhat-ignition-ethers": "^0.15.4",
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.22.19"
+    "hardhat": "^2.22.5",
+    "wait-on": "^7.2.0"
   }
 }

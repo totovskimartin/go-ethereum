@@ -1,18 +1,21 @@
-version: '3.8'
 services:
-  geth:
-    image: mtotovski/go-ethereum
-    ports:
-      - "8545:8545"
-    networks:
-      - geth-net
-    command: >
-      --dev
-      --http
-      --http.addr 0.0.0.0
-      --http.port 8545
-      --http.api personal,eth,net,web3
-
-networks:
-  geth-net:
-    driver: bridge
+   geth:
+     build:
+       context: .
+       dockerfile: Dockerfile
+     image: mtotovski/go-ethereum:latest
+     ports:
+       - "8545:8545" # JSON-RPC HTTP
+     command: >
+       --dev --http --http.addr=0.0.0.0 --http.api=eth,net,web3,personal,miner,debug,txpool --http.corsdomain="*" --ws --ws.addr=0.0.0.0 --ws.api=eth,net,web3 --ws.origins="*" --allow-insecure-unlock --mine --networkid=1337
+     restart: unless-stopped
+  #  geth-contracts-deployed:
+  #    build:
+  #      context: .
+  #      dockerfile: Dockerfile
+  #    image: mtotovski/go-ethereum:contracts-deployed
+  #    ports:
+  #      - "8546:8546" # JSON-RPC HTTP
+  #    command: >
+  #      --dev --http --http.addr=0.0.0.0 --http.api=eth,net,web3,personal,miner,debug,txpool --http.corsdomain="*" --ws --ws.addr=0.0.0.0 --ws.api=eth,net,web3 --ws.origins="*" --allow-insecure-unlock --mine --networkid=1337
+  #    restart: unless-stopped
