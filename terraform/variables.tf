@@ -36,7 +36,3 @@ variable "app_name" {
 variable "replicas" {
   default = 1
 }
-
-variable "s3_bucket" {
-  default = "mtotovski-go-ethereum-tfstate-bucket"
-}
