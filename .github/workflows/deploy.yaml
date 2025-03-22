@@ -33,6 +33,7 @@ jobs:
       - name: Docker compose up
         run: |
           docker compose up -d --build
+          chmod -R 755 blockscout/services/*
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
