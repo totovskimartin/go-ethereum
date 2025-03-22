@@ -1,38 +1,29 @@
 variable "region" {
-  description = "The AWS region to create resources in"
+  description = "AWS region"
+  type        = string
   default     = "eu-west-1"
 }
 
-variable "cluster_name" {
-  description = "The name of the EKS cluster"
-  default     = "go-ethereum-eks-cluster"
-}
-
-variable "node_instance_type" {
-  description = "EC2 instance type for EKS nodes"
-  default     = "t2.micro"
-}
-
-variable "image_repo" {
-  description = "Container image repository"
-  type        = string
-  default     = "mtotovski/go-ethereum"
-}
-
-variable "image_tag" {
-  description = "Container image tag"
-  type        = string
-  default     = "contracts-deployed"
-}
-
-variable "namespace" {
-  default = "default"
-}
-
 variable "app_name" {
-  default = "geth-app"
+  description = "Name of the application"
+  type        = string
+  default     = "go-ethereum"
 }
 
-variable "replicas" {
-  default = 1
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
+  type        = string
+  default     = "geth-cluster"
+}
+
+variable "docker_image" {
+  description = "Docker image to deploy"
+  type        = string
+  default     = "mtotovski/go-ethereum:contracts-deployed"
+}
+
+variable "app_replicas" {
+  description = "Number of replicas for the application"
+  type        = number
+  default     = 1
 }

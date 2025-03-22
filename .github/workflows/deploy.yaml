@@ -32,7 +32,7 @@ jobs:
 
       - name: Docker compose up
         run: |
-          docker compose up -d
+          docker compose up -d --build
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5

@@ -1,21 +1,13 @@
-provider "kubernetes" {
-  host                   = aws_eks_cluster.geth-cluster.endpoint
-  cluster_ca_certificate = base64decode(aws_eks_cluster.geth-cluster.certificate_authority[0].data)
-  token                  = data.aws_eks_cluster_auth.geth-cluster.token
-}
-
-data "aws_eks_cluster_auth" "geth-cluster" {
-  name = aws_eks_cluster.geth-cluster.name
-}
-
-resource "kubernetes_deployment" "geth" {
+resource "kubernetes_deployment" "app" {
   metadata {
-    name      = var.app_name
-    namespace = var.namespace
+    name = var.app_name
+    labels = {
+      app = var.app_name
+    }
   }
 
   spec {
-    replicas = 1
+    replicas = var.app_replicas
 
     selector {
       match_labels = {
@@ -29,39 +21,48 @@ resource "kubernetes_deployment" "geth" {
           app = var.app_name
         }
       }
+
       spec {
         container {
-          image = var.image_repo
+          image = var.docker_image
           name  = var.app_name
 
           port {
             container_port = 8545
           }
+
+          # resources {
+          #   limits = {
+          #     cpu    = "500m"
+          #     memory = "512Mi"
+          #   }
+          #   requests = {
+          #     cpu    = "100m"
+          #     memory = "128Mi"
+          #   }
+          # }
         }
       }
     }
   }
+
+  depends_on = [
+    module.eks,
+  ]
 }
 
-resource "kubernetes_service" "app_service" {
+resource "kubernetes_service" "app" {
   metadata {
-    name      = "${var.app_name}-svc"
-    namespace = var.namespace
-    annotations = {
-      "service.beta.kubernetes.io/aws-load-balancer-type" = "nlb"
-    }
+    name = "geth-service"
   }
-
   spec {
     selector = {
-      app = var.app_name
+      app = kubernetes_deployment.app.metadata[0].labels.app
     }
-
-    type = "LoadBalancer"
-
     port {
       port        = 8545
       target_port = 8545
     }
+    type = "NodePort" # hitting 'client rate limiter Wait returned an error: context deadline exceeded' using LoadBalancer
   }
 }
