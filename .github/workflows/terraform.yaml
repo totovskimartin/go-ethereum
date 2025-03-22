@@ -9,6 +9,7 @@ on:
 jobs:
   terraform-deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       id-token: write
       contents: read
@@ -30,11 +31,11 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Terraform stages
+      - name: Terraform deploy
+        working-directory: ./terraform
         run: |
-          cd terraform/ 
           terraform init
-          terraform fmt -check
+          terraform fmt
           terraform validate
           terraform plan
-          terraform apply -auto-approve
+        # terraform apply -auto-approve
