@@ -1,6 +1,6 @@
 ## Annotations:
 
-The kubernetes service resource in `eks.tf` is using `NodePort` instead of `LoadBalancer` as the deploy finishes successfully but hits
+The kubernetes service resource in `eks.tf` is using `NodePort` instead of `LoadBalancer` as the deploy finishes successfully but hits:
 
 ```shell
 Error: client rate limiter Wait returned an error: context deadline exceeded
