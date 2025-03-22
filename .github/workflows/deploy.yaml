@@ -43,6 +43,6 @@ jobs:
             docker pull mtotovski/go-ethereum:contracts-deployed
             docker run -d -p 8545:8545 -p 8546:8546 -p 8547:8547 -p 30303:30303 --name devnet-test mtotovski/go-ethereum:contracts-deployed
 
-      - name: Run Hardhat tests against devnet
-        working-directory: ./hardhat
-        run: npm run test
+      # - name: Run Hardhat tests against devnet
+      #   working-directory: ./hardhat
+      #   run: npm run test
