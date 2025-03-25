@@ -29,7 +29,7 @@ jobs:
           context: .
           file: Dockerfile.hardhat
           push: true
-          tags: ${{ env.DOCKERHUB_REPO }}:devnet
+          tags: mtotovski/go-ethereum:devnet
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
