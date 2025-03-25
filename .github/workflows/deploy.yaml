@@ -1,4 +1,4 @@
-name: Deploy Hardhat to Devnet
+name: Deploy Hardhat to Devnet & run tests
 
 on:
   pull_request:
