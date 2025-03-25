@@ -20,29 +20,31 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PAT }}
 
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
-          file: Dockerfile
+          file: Dockerfile.hardhat
           push: true
-          tags: ${{ env.DOCKERHUB_REPO }}:contracts-deployed
+          tags: ${{ env.DOCKERHUB_REPO }}:devnet
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Deploy Hardhat Contracts
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+            
+      - name: Install Hardhat dependencies
         working-directory: ./hardhat
-        run: |
-          npm install
-          npx hardhat compile
-          npx hardhat run scripts/deploy.js
+        run: npm install
 
-      - name: Start local devnet container
+      - name: Start local container
         run: |
-            docker pull ${{ env.DOCKERHUB_REPO }}:contracts-deployed
-            docker run -d -p 8545:8545 -p 8546:8546 -p 8547:8547 -p 30303:30303 --name devnet-test ${{ env.DOCKERHUB_REPO }}:contracts-deployed
+            docker pull ${{ env.DOCKERHUB_REPO }}:devnet
+            docker run -d -p 8545:8545 -p 8546:8546 -p 8547:8547 -p 30303:30303 --name devnet-test ${{ env.DOCKERHUB_REPO }}:devnet
 
-      # - name: Run Hardhat tests against devnet
-      #   working-directory: ./hardhat
-      #   run: npm run test
+      - name: Run Hardhat tests against devnet
+        working-directory: ./hardhat
+        run: npm run test
