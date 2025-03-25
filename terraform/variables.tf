@@ -19,7 +19,7 @@ variable "cluster_name" {
 variable "docker_image" {
   description = "Docker image to deploy"
   type        = string
-  default     = "mtotovski/go-ethereum:contracts-deployed"
+  default     = "mtotovski/go-ethereum-devnet"
 }
 
 variable "app_replicas" {
