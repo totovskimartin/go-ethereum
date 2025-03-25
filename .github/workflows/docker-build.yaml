@@ -27,5 +27,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: ${{ env.DOCKERHUB_REPO }}
+          tags: ${{ env.DOCKERHUB_REPO }}:geth
           push: true

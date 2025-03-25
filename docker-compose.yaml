@@ -3,7 +3,7 @@ services:
      build:
        context: .
        dockerfile: Dockerfile
-     image: mtotovski/go-ethereum:latest
+     image: mtotovski/go-ethereum:geth
      ports:
        - "8545:8545"
        - "8546:8546"
