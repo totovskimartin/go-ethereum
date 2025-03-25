@@ -42,16 +42,15 @@ jobs:
       - name: Install Node.js and npm in container
         run: docker exec geth-devnet apk add --no-cache nodejs npm
 
-      - name: Install Hardhat dependencies
-        run: docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npm install"
-
-      - name: Run Hardhat tests
-        run: docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npx hardhat test"
+      - name: Install Hardhat dependencies & run tests
+        run: |
+         docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npm install"
+         docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npx hardhat test"
 
       - name: Build new Docker image
         run: |
-          docker commit geth-devnet go-eth-hardhat:latest
-          docker tag go-eth-hardhat:latest mtotovski/go-ethereum-devnet:latest
+          docker commit geth-devnet go-eth-devnet:latest
+          docker tag go-eth-devnet:latest mtotovski/go-ethereum-devnet:latest
 
       - name: Push new Docker image
         run: docker push mtotovski/go-ethereum-devnet:latest
