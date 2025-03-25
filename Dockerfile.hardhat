@@ -1,4 +1,4 @@
-FROM mtotovski/go-ethereum:dev AS builder
+FROM mtotovski/go-ethereum:devnet AS builder
 
 RUN apk add --no-cache nodejs npm curl jq
 
