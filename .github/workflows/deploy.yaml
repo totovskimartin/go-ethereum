@@ -22,29 +22,36 @@ jobs:
 
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@v2
+      
+      - name: Pull Docker image
+        run:
+          docker pull mtotovski/go-ethereum:latest
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile.hardhat
-          push: true
-          tags: mtotovski/go-ethereum:devnet
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-            
-      - name: Install Hardhat dependencies
-        working-directory: ./hardhat
-        run: npm install
-
-      - name: Start local container
+      - name: Run image container
         run: |
-            docker pull ${{ env.DOCKERHUB_REPO }}:devnet
-            docker run -d -p 8545:8545 -p 8546:8546 -p 8547:8547 -p 30303:30303 --name devnet-test ${{ env.DOCKERHUB_REPO }}:devnet
+          docker run -d --name geth-devnet -p 8545:8545 -p 8546:8546 mtotovski/go-ethereum:latest \
+            --dev --http --http.addr 0.0.0.0 --http.port 8545 \
+            --http.api personal,db,eth,net,web3 --dev.period 5
 
-      - name: Run Hardhat tests against devnet
-        working-directory: ./hardhat
-        run: npm run test
+      - name: Copy Hardhat files to containerethereum
+        run: |
+          docker exec geth-devnet mkdir -p /go-ethereum/hardhat
+          docker cp hardhat/. geth-devnet:/go-ethereum/hardhat
+          docker exec geth-devnet ls -l /go-ethereum/hardhat
+          
+      - name: Install Node.js and npm in container
+        run: docker exec geth-devnet apk add --no-cache nodejs npm
+
+      - name: Install Hardhat dependencies
+        run: docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npm install"
+
+      - name: Run Hardhat tests
+        run: docker exec geth-devnet sh -c "cd /go-ethereum/hardhat && npx hardhat test"
+
+      - name: Build new Docker image
+        run: |
+          docker commit geth-devnet go-eth-hardhat:latest
+          docker tag go-eth-hardhat:latest mtotovski/go-ethereum-devnet:latest
+
+      - name: Push new Docker image
+        run: docker push mtotovski/go-ethereum-devnet:latest
