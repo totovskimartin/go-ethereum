@@ -6,7 +6,7 @@ The kubernetes service resource in `eks.tf` is using `NodePort` instead of `Load
 Error: client rate limiter Wait returned an error: context deadline exceeded
 ```
 
-### DockerHub repo: 
+### DockerHub repository: 
 
 https://hub.docker.com/repository/docker/mtotovski/go-ethereum/
 
