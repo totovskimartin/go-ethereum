@@ -27,5 +27,5 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: .
-          tags: ${{ env.DOCKERHUB_REPO }}:geth
+          tags: mtotovski/go-ethereum:geth
           push: true
