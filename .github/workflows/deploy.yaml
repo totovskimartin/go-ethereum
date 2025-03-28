@@ -24,8 +24,7 @@ jobs:
         uses: docker/setup-buildx-action@v2
       
       - name: Pull Docker image
-        run:
-          docker pull mtotovski/go-ethereum:latest
+        run: docker pull mtotovski/go-ethereum:latest
 
       - name: Run image container
         run: |
